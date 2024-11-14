@@ -1,8 +1,8 @@
-#Ned2Autonomy
+# Ned2Autonomy
 
-##Remote Control
+## Remote Control
 
-###Quickstart:
+### Quickstart:
 Follow the Ned Quickstart Guide to affirm connection, and connect the XBox controller. Then fire up python from within /remote_control. Then run
 '''
 >>>import main
@@ -11,9 +11,10 @@ Follow the Ned Quickstart Guide to affirm connection, and connect the XBox contr
 >>>main.remote_control_activate(ned)
 ```
 and you're off.
-###Credit:
+### Credit:
 Code is based off of Si Liu's code for a prior project.
 
 The Ned Quickstart Guide is entirely from her project at this point.
 
-##Autonomous Control
+## Autonomous Control
+Coming soon...
