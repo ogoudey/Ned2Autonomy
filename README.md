@@ -4,7 +4,7 @@
 
 ### Quickstart:
 Follow the Ned Quickstart Guide to affirm connection, and connect the XBox controller. Then fire up python from within /remote_control. Then run
-'''
+```
 >>>import main
 >>>ned = main.ned_init()
 >>>main.parameters(ned)
