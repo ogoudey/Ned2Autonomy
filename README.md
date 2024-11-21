@@ -5,7 +5,7 @@ Follow the Ned2 Beginner Guide to affirm connection.
 
 ## Remote Control
 
-Connect the XBox controller. Then fire up python from within /remote_control. Then run
+Connect the XBox controller. Then fire up python from within /remote_control. Then run:
 ```
 >>> import main
 >>> ned = main.ned_init()
@@ -14,24 +14,25 @@ Connect the XBox controller. Then fire up python from within /remote_control. Th
 ```
 and you're off.
 
+TODO: Simplify code and customize the pygame.
+
 ### Credit:
 Code is based off of Si Liu's code for a prior project.
 
 Ned2_beginner_guide.md is entirely from her project at this point.
 
 ## Autonomous Control
+"Autonomous" performance is doing a somewhat prescribed task. To see the task, complete the physical setup first.
+### Setup
+In the MULip lab, 1. make sure the Ned base is right in the outlines (there by default), and 2. make sure the cube (or whatever) is about 1cm above the smaller outline. The planning domain assumes these relative placements.
 
-### Mock setup
-From inside the task1 directory, fire up python.
+### Running
+Then from within the task1 directory fire up python and run:
 ```
->>> import core
->>> p = core.PlanningProblem(None)
->>> p.solve()
+>>> import task
+>>> t = task.Task()
+>>> t.start()
 ```
-This is the point at which Ned is a "mock". Currently to execute the mock Ned, run
-```
->>> p.execute()
-```
-The "actually" is supposed to signify that the printed line is the abstraction of the (actual) actions by Ned. To "realize" Ned, we would replace these print lines.
+Ned should generate a plan to achieve the goal of having the cube put at a specific location in front of it. Then it executes it.
 
 

@@ -78,13 +78,14 @@ class PlanningProblem():
 		grasp.add_precondition(block_at(l))
 		grasp.add_precondition(ungrasped())
 		grasp.add_effect(grasped(), True)
+		grasp.add_effect(ungrasped(), False)
 		
 		drop = unified_planning.model.InstantaneousAction('drop', l=Location)
 		l = drop.parameter('l')
 		drop.add_precondition(grasped())
 		drop.add_precondition(g_at(l)) # or block_at l, since if grasped then blockat = gat
 		drop.add_effect(grasped(), False)
-		drop.add_effect(ungrasped(), False)
+		drop.add_effect(ungrasped(), True)
 		
 		
 		#instantiate objects
@@ -115,7 +116,7 @@ class PlanningProblem():
 		problem.set_initial_value(connected(l3, l2), True)
 		problem.set_initial_value(connected(l2, l1), True)
 		
-		problem.set_initial_value(g_at(l1), True)
+		problem.set_initial_value(g_at(l2), True)
 		problem.set_initial_value(block_at(l4), True)
 		
 		# goal set
@@ -123,38 +124,18 @@ class PlanningProblem():
 		
 		self.problem = problem
 		self.plan = None
-		print(problem)
+		#print(problem)
 	
 	def solve(self):
 		problem = self.problem
 		
 		with OneshotPlanner(problem_kind=problem.kind) as planner:
 			result = planner.solve(problem)
-			print("%s returned: %s" % (planner.name, result.plan))
+			#print("%s returned: %s" % (planner.name, result.plan))
 			
 		self.plan = result.plan
 		return result.plan
 		
 	# these should be in a higher level, somewhat legible acting
-	def move(self, l_from, l_to):
-		print("Actually moving from %s to %s" % (l_from, l_to))
 	
-	def carry(self, l_from, l_to):
-		print("Actually carrying from %s to %s" % (l_from, l_to))
-
-	def grasp(self, l):
-		print("Grasping " + str(l))
-
-
-	def execute(self):
-		plan = self.plan
-		l1, l2, l3, l4 = [(0,0,0),(1,0,0),(1,1,0),(0,1,0)]
-		
-		for action in plan.actions:
-			#check
-			#replan
-			exec("self." + str(action))
-		
-			
-		pass
 
