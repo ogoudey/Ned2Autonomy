@@ -1,9 +1,11 @@
 # Ned2Autonomy
 
+## Quickstart:
+Follow the Ned2 Beginner Guide to affirm connection.
+
 ## Remote Control
 
-### Quickstart:
-Follow the Ned2 Beginner Guide to affirm connection, and connect the XBox controller. Then fire up python from within /remote_control. Then run
+Connect the XBox controller. Then fire up python from within /remote_control. Then run
 ```
 >>> import main
 >>> ned = main.ned_init()
@@ -15,7 +17,7 @@ and you're off.
 ## Autonomous Control
 
 ### Mock setup
-from inside the task1 directory, fire up python.
+From inside the task1 directory, fire up python.
 ```
 >>> import core
 >>> p = core.PlanningProblem(None)
