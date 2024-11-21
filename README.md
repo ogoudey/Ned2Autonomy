@@ -35,7 +35,3 @@ This is the point at which Ned is a "mock". Currently to execute the mock Ned, r
 The "actually" is supposed to signify that the printed line is the abstraction of the (actual) actions by Ned. To "realize" Ned, we would replace these print lines.
 
 
-
-
-## Autonomous Control
-Coming soon...
