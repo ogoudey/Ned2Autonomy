@@ -8,6 +8,7 @@ Follow the Ned2 Beginner Guide to affirm connection.
 ### Setup
 Follow the setups of (below) Remote Control and Autonomous Control.
 
+### Running
 Run:
 ```
 $ python3 control.py
