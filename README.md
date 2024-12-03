@@ -1,10 +1,12 @@
 # Ned2Autonomy
 
-## Setup
+## Overall Setup
 Follow the Ned2 Beginner Guide to affirm connection.
 
 ## Control Switch
-(Not confirmed... but should be able to)
+
+### Setup
+Follow the setups of (below) Remote Control and Autonomous Control.
 
 Run:
 ```
@@ -13,7 +15,12 @@ $ python3 control.py
 The remote control state will begin, and when it is quit (hit x on the controller), the planner will take over.
 
 ## Remote Control
-Connect the XBox controller. Then fire up python from within /remote_control. Then run:
+
+### Setup
+Connect the XBox controller.
+
+### Running
+Fire up python from within /remote_control. Then run:
 ```
 >>> import main
 >>> ned = main.ned_init()
