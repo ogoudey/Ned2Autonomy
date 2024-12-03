@@ -1,10 +1,11 @@
 # Ned2Autonomy
 
-## Quickstart:
+## Setup
 Follow the Ned2 Beginner Guide to affirm connection.
 
-## Remote Control
+## Control Switch
 
+## Remote Control
 Connect the XBox controller. Then fire up python from within /remote_control. Then run:
 ```
 >>> import main
@@ -23,6 +24,7 @@ Ned2_beginner_guide.md is entirely from her project at this point.
 
 ## Autonomous Control
 "Autonomous" performance is doing a somewhat prescribed task. To see the task, complete the physical setup first.
+
 ### Setup
 In the MULip lab, 1. make sure the Ned base is right in the outlines (there by default), and 2. make sure the cube (or whatever) is about 1cm above the smaller outline. The planning domain assumes these relative placements.
 

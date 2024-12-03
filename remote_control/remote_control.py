@@ -60,110 +60,113 @@ def play_game(robot):
     
     done = False
     print("Go!")
-    while not done:
-        # Event processing step.
-        # Possible joystick events: JOYAXISMOTION, JOYBALLMOTION, JOYBUTTONDOWN,
-        # JOYBUTTONUP, JOYHATMOTION, JOYDEVICEADDED, JOYDEVICEREMOVED
+def step(robot):
+    done = False
+    # Event processing step.
+    # Possible joystick events: JOYAXISMOTION, JOYBALLMOTION, JOYBUTTONDOWN,
+    # JOYBUTTONUP, JOYHATMOTION, JOYDEVICEADDED, JOYDEVICEREMOVED
+    
+    # events = remove_multiple_axismotion_events(events=pygame.event.get())
+    init_gripper_turn = 0
+    for event_idx, event in enumerate(pygame.event.get()):
+        if event.type == pygame.QUIT:
+            done = True  # Flag that we are done so we exit this loop.
         
-        # events = remove_multiple_axismotion_events(events=pygame.event.get())
-        init_gripper_turn = 0
-        for event_idx, event in enumerate(pygame.event.get()):
-            if event.type == pygame.QUIT:
-                done = True  # Flag that we are done so we exit this loop.
+        if event.type == pygame.JOYBUTTONDOWN:
+            print(f"Joystick button {button_dict[event.button]} pressed.")
+            if event.button == 0:  # A
+                robot.close_gripper()
+                # print(f"event: {event}")
+                # print(f"joysticks:{joysticks}")
+                # print(f"joints value in radians [joint1, ..., joint6]: \n {[round(j, 4) for j in robot.arm.get_joints()]}")
+                # print(f"end effector link pose (x, y & z are expressed in meters / roll, pitch & yaw are expressed in radians): \n {np.round(robot.arm.pose.to_list(), 3)}")
+            elif event.button == 3:  # Y
+                robot.open_gripper()
+                
+            elif event.button == 5:  # right bumper
+                # pygame.event.clear(eventtype= pygame.JOYBUTTONDOWN) 
+                print("right bumper: drop arm!")
+                robot.drop_and_monitor()
+                time.sleep(0.5)
+                robot.raise_and_monitor()
+                robot.led_ring.snake([15, 50, 255])
+
+            elif event.button == 1:  # B, go back
+                print(f"Going back home!")
+                robot.go_back_to_home(vel_pct = 100)
+            # elif event.button == 4:  # left bumper, abort fixme: not async
+            #     print(f"Stop moving!")
+            #     robot.arm.stop_move()
+            elif event.button == 2:  # x, quit game
+                print(f"Quit game!")
+                robot.go_back_to_home(vel_pct = 100)
+                done = True
             
-            if event.type == pygame.JOYBUTTONDOWN:
-                print(f"Joystick button {button_dict[event.button]} pressed.")
-                if event.button == 0:  # A
-                    robot.close_gripper()
-                    # print(f"event: {event}")
-                    # print(f"joysticks:{joysticks}")
-                    # print(f"joints value in radians [joint1, ..., joint6]: \n {[round(j, 4) for j in robot.arm.get_joints()]}")
-                    # print(f"end effector link pose (x, y & z are expressed in meters / roll, pitch & yaw are expressed in radians): \n {np.round(robot.arm.pose.to_list(), 3)}")
-                elif event.button == 3:  # Y
-                    robot.open_gripper()
+        # move around
+        if event.type == pygame.JOYAXISMOTION:
+            # e.g., {'joy': 0, 'instance_id': 0, 'axis': 3, 'value': 0.02630695516830958})>
+            joystick = pygame.joystick.Joystick(event.joy)
+            
+            if event.axis in [3]: # right axis, ignore vertical motion. turn claw
+                axis = joystick.get_axis(3)  # horizontal
+                if abs(axis) > GRIPPER_AXI_THREAD:
+                    if init_gripper_turn == 0:
+                        init_gripper_turn = axis
+                    else:
+                        if abs(init_gripper_turn - axis) <= 0.1:  # avoid repeating axis movement
+                            continue
+                    jog_pose = [0,0,0,0,0,0]
+                    if axis < 0:
+                        turn = max(axis * GRIPPER_ROLL_RATIO, -GRIPPER_ROLL_THREASH)
+                    else:
+                        turn = min(axis * GRIPPER_ROLL_RATIO, GRIPPER_ROLL_THREASH)  
+                    jog_pose[5] = turn 
+                    print(f"turn claw: {turn}")
+                    robot.arm.jog_pose(jog_pose) 
                     
-                elif event.button == 5:  # right bumper
-                    # pygame.event.clear(eventtype= pygame.JOYBUTTONDOWN) 
-                    print("right bumper: drop arm!")
-                    robot.drop_and_monitor()
-                    time.sleep(0.5)
-                    robot.raise_and_monitor()
-                    robot.led_ring.snake([15, 50, 255])
+                    break # one event 
 
-                elif event.button == 1:  # B, go back
-                    print(f"Going back home!")
-                    robot.go_back_to_home(vel_pct = 100)
-                # elif event.button == 4:  # left bumper, abort fixme: not async
-                #     print(f"Stop moving!")
-                #     robot.arm.stop_move()
-                elif event.button == 2:  # x, quit game
-                    print(f"Quit game!")
-                    robot.go_back_to_home(vel_pct = 100)
-                    done = True
-                
-            # move around
-            if event.type == pygame.JOYAXISMOTION:
-                # e.g., {'joy': 0, 'instance_id': 0, 'axis': 3, 'value': 0.02630695516830958})>
-                joystick = pygame.joystick.Joystick(event.joy)
-                
-                if event.axis in [3]: # right axis, ignore vertical motion. turn claw
-                    axis = joystick.get_axis(3)  # horizontal
-                    if abs(axis) > GRIPPER_AXI_THREAD:
-                        if init_gripper_turn == 0:
-                            init_gripper_turn = axis
-                        else:
-                            if abs(init_gripper_turn - axis) <= 0.1:  # avoid repeating axis movement
-                                continue
-                        jog_pose = [0,0,0,0,0,0]
-                        if axis < 0:
-                            turn = max(axis * GRIPPER_ROLL_RATIO, -GRIPPER_ROLL_THREASH)
-                        else:
-                            turn = min(axis * GRIPPER_ROLL_RATIO, GRIPPER_ROLL_THREASH)  
-                        jog_pose[5] = turn 
-                        print(f"turn claw: {turn}")
-                        robot.arm.jog_pose(jog_pose) 
-                        
-                        break # one event 
+            elif event.axis in [0, 1]:  # left axis, move arm
+                axis_0 = joystick.get_axis(1)  # vertial -> x axis of robot
+                axis_1 = joystick.get_axis(0)  # horizontal -> y axis of robot
+                amply = 1
+                if abs(axis_0) > 0.5 or abs(axis_1) > 0.5:
+                    jog_pose = [0,0,0,0,0,0]
+                    # print(f"move x: {axis_0}")
+                    # print(f"move y: {axis_1}")
+                    # print(f"shift in x: {shif_value * (axis_0) * 100}cm")
+                    # print(f"shift in y: {shif_value * (-axis_1) * 100}cm")
+                    if axis_0 > 0:
+                        jog_pose[0] = min(shif_value * axis_0 * amply, MOVE_THRESH/100)
+                    else:
+                        jog_pose[0] = max(shif_value * axis_0 * amply, -MOVE_THRESH/100)
+                    if axis_1 > 0:
+                        jog_pose[1] = min(shif_value * axis_1 * amply, MOVE_THRESH/100)
+                    else:
+                        jog_pose[1] = max(shif_value * axis_1 * amply, -MOVE_THRESH/100)
+                    # print(f"jog pose in x, y: {jog_pose[:2]}")
+                    robot.arm.jog_pose(jog_pose)
+                    break
+            
+    
+        # if event.type == pygame.JOYBUTTONUP:
+        #     print(f"Joystick button {event.button} released.")
 
-                elif event.axis in [0, 1]:  # left axis, move arm
-                    axis_0 = joystick.get_axis(1)  # vertial -> x axis of robot
-                    axis_1 = joystick.get_axis(0)  # horizontal -> y axis of robot
-                    amply = 1
-                    if abs(axis_0) > 0.5 or abs(axis_1) > 0.5:
-                        jog_pose = [0,0,0,0,0,0]
-                        # print(f"move x: {axis_0}")
-                        # print(f"move y: {axis_1}")
-                        # print(f"shift in x: {shif_value * (axis_0) * 100}cm")
-                        # print(f"shift in y: {shif_value * (-axis_1) * 100}cm")
-                        if axis_0 > 0:
-                            jog_pose[0] = min(shif_value * axis_0 * amply, MOVE_THRESH/100)
-                        else:
-                            jog_pose[0] = max(shif_value * axis_0 * amply, -MOVE_THRESH/100)
-                        if axis_1 > 0:
-                            jog_pose[1] = min(shif_value * axis_1 * amply, MOVE_THRESH/100)
-                        else:
-                            jog_pose[1] = max(shif_value * axis_1 * amply, -MOVE_THRESH/100)
-                        # print(f"jog pose in x, y: {jog_pose[:2]}")
-                        robot.arm.jog_pose(jog_pose)
-                        break
-                
-        
-            # if event.type == pygame.JOYBUTTONUP:
-            #     print(f"Joystick button {event.button} released.")
+        # Handle hotplugging
+        if event.type == pygame.JOYDEVICEADDED:
+            # This event will be generated when the program starts for every
+            # joystick, filling up the list without needing to create them manually.
+            joy = pygame.joystick.Joystick(event.device_index)
+            joysticks[joy.get_instance_id()] = joy
+            print(f"Joystick {joy.get_instance_id()} connected")
 
-            # Handle hotplugging
-            if event.type == pygame.JOYDEVICEADDED:
-                # This event will be generated when the program starts for every
-                # joystick, filling up the list without needing to create them manually.
-                joy = pygame.joystick.Joystick(event.device_index)
-                joysticks[joy.get_instance_id()] = joy
-                print(f"Joystick {joy.get_instance_id()} connected")
-
-            if event.type == pygame.JOYDEVICEREMOVED:
-                del joysticks[event.instance_id]
-                print(f"Joystick {event.instance_id} disconnected")
-        
+        if event.type == pygame.JOYDEVICEREMOVED:
+            del joysticks[event.instance_id]
+            print(f"Joystick {event.instance_id} disconnected")
+    return done
         # time.sleep(0.5) # avoid getting too many events, especially aximotions
+        
+def game_end(robot):
     robot.led_ring.breath([15, 50, 255], 2, 100, False)
     robot.robot.end()  # close robot connection
     print(F"Robot disconnected. QUIT GAME.")

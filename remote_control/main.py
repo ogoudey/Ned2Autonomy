@@ -1,6 +1,12 @@
 from pyniryo2 import *
-import robot as ned
+import sys
+import os
+sys.path.append(os.getcwd() + "/remote_control")
+print(sys.path)
+import ned_robot as ned
 import remote_control
+
+
 
 WLAN_IP = "10.10.10.10"
 ETHERNET_IP = "169.254.200.201" # or -.200
@@ -86,8 +92,15 @@ def parameters(robot):
 	print(robot.arm.hardware_status())
 	
 def remote_control_activate(ned):
-	remote_control.play_game(ned)
+    remote_control.game_init(ned)
+	#remote_control.play_game(ned)
 	
+def game_end(ned):
+    remote_control.game_end(ned)
+    	
+def remote_control_step(ned):
+    return remote_control.step(ned)
+    
 def disconnect(robot):
     robot.robot.end()
 	

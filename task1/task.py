@@ -1,4 +1,7 @@
 from pyniryo2 import *
+import os
+import sys
+sys.path.append(os.getcwd() + "/task1")
 import core as c          # planning core
 
 from importlib import reload
