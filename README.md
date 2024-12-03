@@ -5,10 +5,12 @@ Follow the Ned2 Beginner Guide to affirm connection.
 
 ## Control Switch
 (Not confirmed... but should be able to)
+
 Run:
 ```
 $ python3 control.py
 ```
+The remote control state will begin, and when it is quit (hit x on the controller), the planner will take over.
 
 ## Remote Control
 Connect the XBox controller. Then fire up python from within /remote_control. Then run:
