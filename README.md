@@ -4,6 +4,11 @@
 Follow the Ned2 Beginner Guide to affirm connection.
 
 ## Control Switch
+(Not confirmed... but should be able to)
+Run:
+```
+$ python3 control.py
+```
 
 ## Remote Control
 Connect the XBox controller. Then fire up python from within /remote_control. Then run:
