@@ -6,19 +6,16 @@ import core as c          # planning core
 
 from importlib import reload
 
+
+
 class Task:
     
-    def __init__(self):
-        WLAN_IP = "10.10.10.10"
-        ETHERNET_IP = "169.254.200.201"
+    def __init__(self, robot=None):
+        if not robot:
+            self.robot = NiryoRobot("169.254.200.201") # Assuming ethernet!
+        else:
+            self.robot = robot
 
-        self.robot = NiryoRobot(ETHERNET_IP) # change
-        print("Connected to Ned through " + ETHERNET_IP)
-        print("Calibrating...")
-        self.robot.arm.calibrate_auto()
-        print("Calibration complete.")
-        
-        self.reset_plan()
     
     def end(self):
         self.robot.end()
@@ -50,7 +47,8 @@ class Task:
 
         l4 = [1.0, -0.5, -0.5, 0.0, -0.5, 0.0]
         # Align initials (move block too).
-        self.move(None, l2)
+        
+        #self.move(None, l2) # not sure I want this...
         
         for action in plan.actions:
 			#check

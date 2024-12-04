@@ -1,6 +1,7 @@
 import unified_planning
 from unified_planning.shortcuts import *
 # import niryo2
+up.shortcuts.get_environment().credits_stream = None
 
 class PlanningDomain():
 	def __init__(self):
