@@ -1,11 +1,13 @@
 import os
 import sys
+sys.path.append(os.getcwd() + "/brain")
 import numpy as np
 import torch
 import torch.nn as nn
-
 import torch.nn.functional  as F
+
 import models
+
 
 
 class Predictor:

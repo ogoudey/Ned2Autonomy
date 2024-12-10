@@ -3,33 +3,6 @@ from unified_planning.shortcuts import *
 # import niryo2
 up.shortcuts.get_environment().credits_stream = None
 
-class PlanningDomain():
-	def __init__(self):
-		# create domain
-		"""
-		Location = UserType('Location')
-		g_at = unified_planning.model.Fluent('g_at', BoolType(), l=Location)
-		block_at = unified_planning.model.Fluent('block_at', BoolType(), l=Location)
-		connected = unified_planning.model.Fluent('connected', BoolType(), l_from=Location, l_to=Location)
-		closed = unified_planning.model.Fluent('closed', BoolType())
-		
-		move = unified_planning.model.InstantaneousAction('move', l_from=Location, l_to=Location)
-		l_from = move.parameter('l_from')
-		l_to = move.parameter('l_to')
-		move.add_precondition(connected(l_from, l_to))
-		move.add_precondition(robot_at(l_from))
-		move.add_effect(g_at(l_from), False)
-		move.add_effect(g_at(l_to), True)
-		move.add_effect(block_at(l_from), False, grasped())
-		move.add_effect(block_at(l_to), True, grasped())
-		
-		close = unified_planning.model.InstantaneousAction('close', l=Location)
-		l = close.parameter('l_at')
-		
-		close.add_precondition(Not(closed()))
-		close.add_effect(closed(), True)
-		close.add_effect(grasped(), True, And(block_at(l), g_at(l)))
-		"""
 
 class PlanningProblem():
 	def __init__(self, domain):

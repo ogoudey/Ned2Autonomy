@@ -66,6 +66,7 @@ class Task:
         #self.move(None, l2) # not sure I want this...
         
         for action in plan.actions:
+            print("executing " + str(action))
 			#check
 			#replan
             exec("self." + str(action))
@@ -76,4 +77,5 @@ class Task:
     def start(self):
         p = c.PlanningProblem(None)
         plan = p.solve()
+        print(plan)
         self.execute(plan, p.problem.goals)
