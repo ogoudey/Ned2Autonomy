@@ -10,6 +10,7 @@ if __name__ == "__main__":
         g = game.Game(ned)
         switch = g.loop()
         while not switch:
+            
             switch = g.loop()
         print("Switching to autopilot...")
         t = task.Task(ned) # initializes NiryoRobot
