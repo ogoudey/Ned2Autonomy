@@ -3,6 +3,7 @@ from teleop import game
 from pyniryo2 import *
 import predictor
 
+import os
 import threading
 import time
 
@@ -21,8 +22,9 @@ def thread():
     while True:
         time.sleep(.6)
         index += 1
-        prediction = model.predict(sub_feature(index))
-        if prediction:
+        prediction = model.predict(sub_feature[index])
+
+        if prediction[0][1] > .5:
             event.set()
         else:
             event.clear()
