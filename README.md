@@ -1,18 +1,5 @@
 # Ned2Autonomy
 
-## Overall Setup
-Follow the Ned2 Beginner Guide to affirm connection.
-
-### Setup
-Follow the setups of (below) Remote Control and Autonomous Control.
-
-### Running
-Run:
-```
-$ python3 control.py
-```
-The remote control state will begin, and when it is quit (hit x on the controller), the planner will take over.
-
 ## Remote Control
 
 ### Setup
