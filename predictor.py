@@ -3,7 +3,7 @@ import sys
 import numpy as np
 import torch
 import torch.nn as nn
-from torchinfo import summary
+
 import torch.nn.functional  as F
 import models
 

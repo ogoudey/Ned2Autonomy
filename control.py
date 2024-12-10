@@ -1,7 +1,7 @@
 from task1 import task
 from teleop import game
 from pyniryo2 import *
-import Predictor
+import predictor
 
 import threading
 import time
@@ -10,7 +10,7 @@ import brain_data
 
 event = threading.Event()
 
-model_path = "beststatedict"
+model_path = "best_model.statedict"
 data_path = "data"
 
 
@@ -30,12 +30,13 @@ def thread():
         
 
 if __name__ == "__main__":
-    
+    t = threading.Thread(target=thread, args=[])
+    t.run()
     ned = NiryoRobot("169.254.200.201") # Assuming ethernet!
     #model = Predictor
     print("A to activate gripper")
     while True:
-    
+        
         g = game.Game(ned)
         switch = g.loop()
         while not event.is_set():
