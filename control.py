@@ -1,6 +1,7 @@
 from task1 import task
 from teleop import game
 from pyniryo2 import *
+
 from brain import predictor, brain_data
 
 import os
@@ -19,23 +20,23 @@ def thread(model, sub_feature):
     index = 0
     while True:
         index += 1
-        time.sleep(1)
-        if index > 5:
-            print(event.is_set())
-            print("Setting")
+        time.sleep(.6)
+        prediction = [[0.0,index]]
+        prediction = model.predict(sub_feature[index])
+        if prediction[0][1] > 0.5:
+            print("Prediction HIGH")
             event.set()
-        print("Not setting")
+            continue
+        else:
+            pass
+        print("Not setting (output: " + str(prediction) + ")")
         """
-        time.sleep(2)
-        print("Prediction detected")        
-        event.set()
         
-        time.sleep(.1)
-        index += 1
-        print(index)
+       
+
         prediction = model.predict(sub_feature[index])
         if prediction[0][1] > .5:
-            print("Prediction detected")
+
             event.set()
         else:
             #print(event.is_set())
@@ -46,14 +47,15 @@ def thread(model, sub_feature):
 
 if __name__ == "__main__":
     event.clear()
+    print("(Re)instantiating Ned...")
     ned = NiryoRobot("169.254.200.201") # Assuming ethernet!
-    print("Loading subject data...")
+    #ned.arm.calibrate_auto()
+    print("Loading model...")
     model = predictor.Predictor(model_path)
+    print("Loading subject data...")
     sub_feature, __ = brain_data.read_subject_csv_binary(os.path.join(data_path, "sub_1.csv"), num_chunk_this_window_size=1488)
     th = threading.Thread(target=thread, args=[model, sub_feature])
     th.start()
-    #model = Predictor
-    print("A to activate gripper")
     while True:
         print("Teleoperation...")        
         g = game.Game(ned)
@@ -69,6 +71,6 @@ if __name__ == "__main__":
         t = task.Task(ned) # initializes NiryoRobot
         t.start() # makes plan and executes it
         event.clear()
-    print("Plan finished execution. Ending...")
+
     th.join()
     
