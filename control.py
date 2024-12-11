@@ -49,18 +49,18 @@ if __name__ == "__main__":
     event.clear()
     print("(Re)instantiating Ned...")
     ned = NiryoRobot("169.254.200.201") # Assuming ethernet!
-    #ned.arm.calibrate_auto()
+    ned.arm.set_arm_max_velocity(10)
+    ned.arm.calibrate_auto()
     print("Loading model...")
     model = predictor.Predictor(model_path)
     print("Loading subject data...")
     sub_feature, __ = brain_data.read_subject_csv_binary(os.path.join(data_path, "sub_1.csv"), num_chunk_this_window_size=1488)
     th = threading.Thread(target=thread, args=[model, sub_feature])
-    th.start()
+    #th.start() # comment out to prohibit switch
     while True:
         print("Teleoperation...")        
         g = game.Game(ned)
         switch = g.loop()
-        #print(event.is_set())
         while not event.is_set():
 
             switch = g.loop()
