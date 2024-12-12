@@ -62,7 +62,7 @@ if __name__ == "__main__":
     print("(Re)instantiating Ned...")
     ned = NiryoRobot("169.254.200.201") # Assuming ethernet!
     ned.arm.calibrate_auto()
-    ned.arm.set_max_arm_velocity(100)
+    ned.arm.set_arm_max_velocity(100) # change % for testing
     print("Loading model...")
     model = predictor.Predictor(model_path)
     print("Loading subject data...")
