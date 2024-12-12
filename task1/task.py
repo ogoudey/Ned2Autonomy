@@ -5,16 +5,17 @@ sys.path.append(os.getcwd() + "/task1")
 import core as c          # planning core
 
 from importlib import reload
-
+import threading
 
 
 class Task:
     
-    def __init__(self, robot=None):
+    def __init__(self, robot=None, event_variable=None):
         if not robot:
             self.robot = NiryoRobot("169.254.200.201") # Assuming ethernet!
         else:
             self.robot = robot
+        self.event = event_variable
 
     
     def end(self):
@@ -112,13 +113,19 @@ class Task:
         block3 = "block3"
         # Align initials (move block too).        
         #self.move(None, l2) # not sure I want this...
-        
+        self.floor(None, None)
         for action in plan.actions:
-            print("executing " + str(action))
+            
+            if not self.event.is_set(): # if it's not HIGH
+                print("Prediction LOW")
+                print("Switching to Teleoperation...")
+                return
+            else:
+                print("From autonomy: " + str(self.event.is_set()))
 			#check
 			#replan
+            print("executing " + str(action))
             exec("self." + str(action))
-		
         print("Goal reached.")	
 		
 		 
