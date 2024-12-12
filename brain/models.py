@@ -137,7 +137,7 @@ class DeepConvNet150(nn.Module):
         x = self.block4(x)
         x = self.classifier(x)
         x = x.squeeze(dim=2).squeeze(dim=2)
-        print(x.shape)
+        #print(x.shape)
         normalized_probabilities = F.log_softmax(x, dim = 1)     
 
         return normalized_probabilities #for EEGNet and DeepConvNet, directly use nn.NLLLoss() as criterion

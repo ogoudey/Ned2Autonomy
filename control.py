@@ -25,7 +25,7 @@ def thread(model, sub_feature):
     index = 0
     while True:
         index += 1
-        time.sleep(.01)
+        time.sleep(.6)
         prediction = [[0.0,index]]
         prediction = model.predict(sub_feature[index])
         if prediction[0][1] > 0.5:
