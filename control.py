@@ -25,7 +25,7 @@ def thread(model, sub_feature):
     index = 0
     while True:
         index += 1
-        time.sleep(.6)
+        time.sleep(.01)
         prediction = [[0.0,index]]
         prediction = model.predict(sub_feature[index])
         if prediction[0][1] > 0.5:
@@ -54,7 +54,6 @@ if __name__ == "__main__":
     event.clear()
     print("(Re)instantiating Ned...")
     ned = NiryoRobot("169.254.200.201") # Assuming ethernet!
-    ned.arm.set_arm_max_velocity(10)
     ned.arm.calibrate_auto()
     print("Loading model...")
     model = predictor.Predictor(model_path)
@@ -75,6 +74,7 @@ if __name__ == "__main__":
         
         t = task.Task(ned) # initializes NiryoRobot
         t.start() # makes plan and executes it
+        print("OUTSIDE OF TASK START")
         event.clear()
 
     th.join()
