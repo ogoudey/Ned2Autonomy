@@ -15,6 +15,11 @@ event = threading.Event()
 model_path = "brain/best_model.statedict"
 data_path = "brain/data"
 
+"""
+class Sleeper:
+    def __init__(self):
+        self = threading.Thread.__init__(
+"""
 
 def thread(model, sub_feature):
     index = 0
@@ -56,7 +61,7 @@ if __name__ == "__main__":
     print("Loading subject data...")
     sub_feature, __ = brain_data.read_subject_csv_binary(os.path.join(data_path, "sub_1.csv"), num_chunk_this_window_size=1488)
     th = threading.Thread(target=thread, args=[model, sub_feature])
-    #th.start() # comment out to prohibit switch
+    th.start() # comment out to prohibit switch
     while True:
         print("Teleoperation...")        
         g = game.Game(ned)
